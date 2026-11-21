@@ -4,7 +4,9 @@
 
 #include "Medico.h"
 Medico::Medico() : nombreMedico("medico: "){}
-Medico::Medico(std::string nombreMedico) : nombreMedico(nombreMedico){}
+Medico::Medico(std::string nombreMedico) {
+    this-> nombreMedico = nombreMedico;
+}
 
 std::string Medico::getNombreMedico() const {
     return nombreMedico;

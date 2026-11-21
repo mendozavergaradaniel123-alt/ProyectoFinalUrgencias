@@ -8,6 +8,15 @@
 
 
 class Jornada {
+private:
+    int numJornada;
+    int turnos;
+
+    public:
+    Jornada(int numJornada, int turnos);
+    int getNumJornada() const;
+    int getTurnos() const;
+
 
 };
 
