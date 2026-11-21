@@ -9,6 +9,25 @@
 
 
 class Cama {
+private:
+    Paciente* paciente;
+    int idCama;
+    bool camaOcupada;
+    int turnosRecuperacion;
+
+    Cama* anterior;
+    Cama* siguiente;
+public:
+    Cama();
+    Cama(int idCama);
+    Paciente* getPaciente() const;
+    int getCamaId() const;
+    bool getCamaOcupada() const;
+    int getTurnosRecuperacion() const;
+    void ocuparCama(Paciente* paciente);
+    void avanzarTurno();
+    void liberarCama();
+
 
 };
 
