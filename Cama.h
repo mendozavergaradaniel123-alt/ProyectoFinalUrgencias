@@ -4,6 +4,7 @@
 
 #ifndef PROYECTOFINALURGENCIAS_CAMA_H
 #define PROYECTOFINALURGENCIAS_CAMA_H
+#include "Paciente.h"
 
 
 
