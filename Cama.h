@@ -1,0 +1,16 @@
+//
+// Created by emego on 21/11/2026.
+//
+
+#ifndef PROYECTOFINALURGENCIAS_CAMA_H
+#define PROYECTOFINALURGENCIAS_CAMA_H
+
+
+
+class Cama {
+
+};
+
+
+
+#endif //PROYECTOFINALURGENCIAS_CAMA_H

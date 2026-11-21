@@ -1,0 +1,16 @@
+//
+// Created by emego on 21/11/2026.
+//
+
+#ifndef PROYECTOFINALURGENCIAS_PACIENTE_H
+#define PROYECTOFINALURGENCIAS_PACIENTE_H
+
+
+
+class Paciente {
+
+};
+
+
+
+#endif //PROYECTOFINALURGENCIAS_PACIENTE_H

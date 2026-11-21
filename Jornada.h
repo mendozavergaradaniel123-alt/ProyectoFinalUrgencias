@@ -1,0 +1,16 @@
+//
+// Created by emego on 21/11/2026.
+//
+
+#ifndef PROYECTOFINALURGENCIAS_JORNADA_H
+#define PROYECTOFINALURGENCIAS_JORNADA_H
+
+
+
+class Jornada {
+
+};
+
+
+
+#endif //PROYECTOFINALURGENCIAS_JORNADA_H
