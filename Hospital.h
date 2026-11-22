@@ -4,10 +4,51 @@
 
 #ifndef PROYECTOFINALURGENCIAS_HOSPITAL_H
 #define PROYECTOFINALURGENCIAS_HOSPITAL_H
+#include "Medico.h"
+#include "Jornada.h"
+#include "Cama.h"
+#include "Paciente.h"
+#include <list>
+#include <queue>
+#include <stack>
+#include <unordered_map>
+#include <map>
+#include <string>
 
 
+struct CompararPaciente {
+    bool operator()(Paciente* a, Paciente* b) {
+        if (a->getNivelGravedad() != b->getNivelGravedad()) {
+            return a->getNivelGravedad() > b->getNivelGravedad();
+        }
+        return a->getTurnoLlegada() > b->getTurnoLlegada();
+    }
+};
 
 class Hospital {
+    private:
+    Cama* primeraCama;
+    Cama* camaActual;
+    Medico* medicoActual;
+    int contadorTurnos;
+
+    std::unordered_map<std::string, Paciente*>historialPaciente;
+    std::stack<Paciente*> ultimoAtendido;
+    std::map<std::string, Medico*> registroMedico;
+    std::priority_queue<Paciente*, std::list<Paciente*>, CompararPaciente> colaPrioridad;
+
+    int pacientesRecibidos;
+    int pacientesDeAlta;
+    int perdidos;
+    int sumaTurnosEspera;
+    void accionesMedico();
+    void controlTiempo();
+    void mostrarHospital();
+
+    public:
+    Hospital();
+    ~Hospital();
+    void iniciarHospital();
 
 };
 
