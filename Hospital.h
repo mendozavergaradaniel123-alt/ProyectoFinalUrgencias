@@ -1,0 +1,16 @@
+//
+// Created by emego on 21/11/2026.
+//
+
+#ifndef PROYECTOFINALURGENCIAS_HOSPITAL_H
+#define PROYECTOFINALURGENCIAS_HOSPITAL_H
+
+
+
+class Hospital {
+
+};
+
+
+
+#endif //PROYECTOFINALURGENCIAS_HOSPITAL_H

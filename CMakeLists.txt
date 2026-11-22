@@ -11,4 +11,6 @@ add_executable(ProyectoFinalUrgencias main.cpp
         Jornada.cpp
         Jornada.h
         Paciente.cpp
-        Paciente.h)
+        Paciente.h
+        Hospital.cpp
+        Hospital.h)
