@@ -28,6 +28,11 @@ public:
     void avanzarTurno();
     void liberarCama();
 
+    Cama* getAnterior() const;
+    Cama* getSiguiente() const;
+    void camaAnterior(Cama* anterior);
+    void camaSiguiente(Cama* siguiente);
+
 
 };
 

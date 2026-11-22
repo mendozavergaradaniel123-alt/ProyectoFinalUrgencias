@@ -9,6 +9,8 @@ Cama::Cama() {
     idCama = 0;
     camaOcupada = false;
     turnosRecuperacion = 0;
+    this-> anterior = nullptr;
+    this-> siguiente = nullptr;
 }
 
 Cama::Cama(int idCama) {
@@ -16,6 +18,8 @@ Cama::Cama(int idCama) {
     this-> idCama = idCama;
     this-> camaOcupada = false;
     turnosRecuperacion = 0;
+    this-> anterior = nullptr;
+    this-> siguiente = nullptr;
 }
 
 Paciente *Cama::getPaciente() const {
@@ -53,4 +57,21 @@ void Cama::liberarCama() {
     this-> paciente = nullptr;
     camaOcupada = false;
     turnosRecuperacion = 0;
+}
+
+Cama* Cama::getAnterior() const {
+    return anterior;
+}
+
+Cama *Cama::getSiguiente() const {
+    return siguiente;
+}
+
+void Cama::camaAnterior(Cama* anterior) {
+    this-> anterior = anterior;
+
+}
+
+void Cama::camaSiguiente(Cama *siguiente) {
+    this-> siguiente = siguiente;
 }
