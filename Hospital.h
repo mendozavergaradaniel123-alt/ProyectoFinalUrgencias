@@ -14,10 +14,11 @@
 #include <unordered_map>
 #include <map>
 #include <string>
+#include <vector>
 
 
 struct CompararPaciente {
-    bool operator()(Paciente* a, Paciente* b) {
+    bool operator()(Paciente* a, Paciente* b) const {
         if (a->getNivelGravedad() != b->getNivelGravedad()) {
             return a->getNivelGravedad() > b->getNivelGravedad();
         }
@@ -35,7 +36,7 @@ class Hospital {
     std::unordered_map<std::string, Paciente*>historialPaciente;
     std::stack<Paciente*> ultimoAtendido;
     std::map<std::string, Medico*> registroMedico;
-    std::priority_queue<Paciente*, std::list<Paciente*>, CompararPaciente> colaPrioridad;
+    std::priority_queue<Paciente*, std::vector<Paciente*>, CompararPaciente> colaPrioridad;
 
     int pacientesRecibidos;
     int pacientesDeAlta;
