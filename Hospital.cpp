@@ -3,6 +3,7 @@
 //
 
 #include "Hospital.h"
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 
@@ -185,5 +186,73 @@ void Hospital::mostrarHospital() {
 
     std::cout<< "METODOS DE MEDICO: " <<std::endl;
     std::cout << "[A] Izq | [D] Der | [R] Recibir | [T] Tratar | [X] Alta | [U] Ultimos | [C cedula] Consultar | [E] Cambiar Medico | [O] Salir."<< std::endl;
+
+}
+
+
+void Hospital::controlTiempo() {
+    contadorTurnos++;
+    std::list<Paciente*> pacientesTemporal;
+    while (!colaPrioridad.empty()) {
+        Paciente* pacienteActual = colaPrioridad.top();
+        pacientesTemporal.push_back(pacienteActual);
+        colaPrioridad.pop();
+    }
+        for (Paciente* p : pacientesTemporal) {
+            p->registrarTurno();
+            if (p->getTurnosEspera() > 6 && p->getNivelGravedad() == 1) {
+                perdidos++;
+                p->setEstadoPaciente("PERDIDO");
+                p->setTurnoFinal(contadorTurnos);
+                if (medicoActual != nullptr) {
+                    p->setMedicoResponsable(medicoActual->getNombreMedico());
+
+                }
+                std::cout<<"El estado del paciente es PERDIDO, debido a que supero los 6 turnos de espera necesarios" <<std::endl;
+            }
+            else {
+                colaPrioridad.push(p);
+            }
+
+        }
+    int cantidadLlegadas = rand() % 3;
+    for (int i = 0; i < cantidadLlegadas; i++) {
+        std::string cedulaAleatoria = "10" + std::to_string(10000+rand() % 90000);
+        int gravedadAleatoria = rand() % 5 + 1;
+        std::string nombreGenerado;
+        std::string condicionMedicaGenerada;
+
+        switch (rand() % 5) {
+            case 0:
+                nombreGenerado = "Daniel Mendoza Vergara";
+                condicionMedicaGenerada ="lesión del ligamento cruzado de la rodilla, un desgarro en uno de los tejidos clave que mantienen estable la articulación";
+                break;
+                case 1:
+                nombreGenerado = "Lionel Andrés Messi Cuccittini";
+                condicionMedicaGenerada = "resfriado común, una infección viral leve de las vías respiratorias altas";
+                break;
+                case 2:
+                nombreGenerado = "Sofía Margarita Vergara Vergara";
+                condicionMedicaGenerada ="diabetes tipo 2, una condición crónica en la que el azúcar se acumula en la sangre porque el cuerpo no aprovecha adecuadamente la insulina";
+                break;
+                case 3:
+                nombreGenerado = "Eduardo Malambo Gomez";
+                condicionMedicaGenerada = "cáncer de próstata, una afección en la que crecen células anormales en la glándula prostática";
+                break;
+                case 4:
+                nombreGenerado = "Emily Ardila Montoya";
+                condicionMedicaGenerada = "asma, una condición respiratoria crónica en la que las vías aéreas se inflaman y estrechan, causando tos, silbidos en el pecho y dificultad para respirar";
+                break;
+
+        }
+        Paciente* nuevoPaciente = new Paciente(cedulaAleatoria,nombreGenerado, condicionMedicaGenerada, contadorTurnos, gravedadAleatoria);
+        colaPrioridad.push(nuevoPaciente);
+        historialPaciente.insert({cedulaAleatoria,nuevoPaciente});
+
+    }
+
+
+
+
 
 }
