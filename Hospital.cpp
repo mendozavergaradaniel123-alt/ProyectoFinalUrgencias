@@ -58,10 +58,10 @@ void Hospital::mostrarHospital() {
     }
     std::cout << "-----TURNOS-----" << std::endl;
     if (contadorTurnos <= 0) {
-        std::cout << "Aun no empieza la jornada." << std::endl;
+        std::cout << "Aun no empieza la jornada" << std::endl;
     }
     else if (contadorTurnos > 50) {
-        std::cout << "La jornada ya finalizo." << std::endl;
+        std::cout << "La jornada ya finalizo" << std::endl;
     }
     else {
         std::cout << "Nos encontramos en el turno: "<<contadorTurnos<< " de 50" << std::endl;
@@ -250,9 +250,43 @@ void Hospital::controlTiempo() {
         historialPaciente.insert({cedulaAleatoria,nuevoPaciente});
 
     }
+}
 
-
-
+char Hospital::accionesMedico() {
+    char opcion;
+    std::cin>>opcion;
+    switch (opcion) {
+        case 'a': case 'A':
+            if (camaActual->getAnterior() != nullptr) {
+                camaActual = camaActual->getAnterior();
+            }
+            else {
+                std::cout<<"ya te encuentras en la cama #1"<<std::endl;
+            }
+            break;
+        case 'd': case 'D':
+            if (camaActual->getSiguiente() != nullptr) {
+                camaActual = camaActual->getSiguiente();
+            }
+            else {
+                std::cout<<"ya te encuentras en la cama #10"<<std::endl;
+            }
+            break;
+        case'r': case 'R':
+            if (!camaActual->getCamaOcupada() && !colaPrioridad.empty()) {
+                Paciente* sgtePaciente = colaPrioridad.top();
+                colaPrioridad.pop();
+                camaActual->ocuparCama(sgtePaciente);
+                pacientesRecibidos++;
+                sumaTurnosEspera += sgtePaciente->getTurnosEspera();
+            }
+            else {
+                std::cout <<"La cama ya se encuentra ocupada o la cola de pacientes esta vacia"<<std::endl;
+            }
+            break;
+        case 't': case 'T':
+            
+    }
 
 
 }

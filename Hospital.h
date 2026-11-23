@@ -42,7 +42,7 @@ class Hospital {
     int pacientesDeAlta;
     int perdidos;
     int sumaTurnosEspera;
-    void accionesMedico();
+    char accionesMedico();
     void controlTiempo();
     void mostrarHospital();
 
