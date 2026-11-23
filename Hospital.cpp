@@ -225,23 +225,23 @@ void Hospital::controlTiempo() {
         switch (rand() % 5) {
             case 0:
                 nombreGenerado = "Daniel Mendoza Vergara";
-                condicionMedicaGenerada ="lesión del ligamento cruzado de la rodilla, un desgarro en uno de los tejidos clave que mantienen estable la articulación";
+                condicionMedicaGenerada ="lesion del ligamento cruzado de la rodilla, un desgarro en uno de los tejidos clave que mantienen estable la articulacion";
                 break;
                 case 1:
-                nombreGenerado = "Lionel Andrés Messi Cuccittini";
-                condicionMedicaGenerada = "resfriado común, una infección viral leve de las vías respiratorias altas";
+                nombreGenerado = "Lionel Andres Messi Cuccittini";
+                condicionMedicaGenerada = "resfriado comun, una infeccion viral leve de las vias respiratorias altas";
                 break;
                 case 2:
-                nombreGenerado = "Sofía Margarita Vergara Vergara";
-                condicionMedicaGenerada ="diabetes tipo 2, una condición crónica en la que el azúcar se acumula en la sangre porque el cuerpo no aprovecha adecuadamente la insulina";
+                nombreGenerado = "Sofia Margarita Vergara Vergara";
+                condicionMedicaGenerada ="diabetes tipo 2, una condicion cronica en la que el azúcar se acumula en la sangre porque el cuerpo no aprovecha adecuadamente la insulina";
                 break;
                 case 3:
                 nombreGenerado = "Eduardo Malambo Gomez";
-                condicionMedicaGenerada = "cáncer de próstata, una afección en la que crecen células anormales en la glándula prostática";
+                condicionMedicaGenerada = "cancer de prostata, una afeccion en la que crecen celulas anormales en la glandula prostatica";
                 break;
                 case 4:
                 nombreGenerado = "Emily Ardila Montoya";
-                condicionMedicaGenerada = "asma, una condición respiratoria crónica en la que las vías aéreas se inflaman y estrechan, causando tos, silbidos en el pecho y dificultad para respirar";
+                condicionMedicaGenerada = "asma, una condicion respiratoria cronica en la que las vias aereas se inflaman y estrechan, causando tos, silbidos en el pecho y dificultad para respirar";
                 break;
 
         }
@@ -355,3 +355,113 @@ char Hospital::accionesMedico() {
     return opcion;
     }
 
+void Hospital::mostrarReporteFinal() {
+    if (medicoActual != nullptr) {
+        std::cout<<"Medico: "<<medicoActual->getNombreMedico()<<" Reporte del turno: "<<std::endl;
+    }
+    else {
+        std::cout<<"no hay medico presente"<<std::endl;
+    }
+    std::cout<<"=============================="<<std::endl;
+    std::cout<<"Turnos totales ejecutados: "<< contadorTurnos << "/50"<<std::endl;
+    std::cout<<"Total pacientes en urgencias: "<<historialPaciente.size()<<std::endl;
+    std::cout<<"Total pacientes ingresados en cama: "<<pacientesRecibidos<<std::endl;
+    std::cout<<"Total pacientes dados de alta: "<< pacientesDeAlta<<std::endl;
+    std::cout<<"Total pacientes perdidos: "<<perdidos<<std::endl;
+    std::cout<<"Pacientes en sala de espera: "<<colaPrioridad.size()<<std::endl;
+    double promedioEspera = 0.0;
+    if (pacientesRecibidos > 0) {
+        promedioEspera = static_cast<double>(sumaTurnosEspera) / pacientesRecibidos;
+    }
+    std::cout<<"El promedio de los turnos de espera es: "<<promedioEspera<<std::endl;
+}
+
+void Hospital::mostrarAuditoria() {
+    if (registroMedico.empty()){
+        std::cout<<"No hay medicos registrados"<<std::endl;
+    }
+    else {
+        for (const auto& datoMedico : registroMedico) {
+            std::cout<<"Nombre: "<<datoMedico.second->getNombreMedico()<<std::endl;
+            std::cout<<"Jornadas realizadas: "<<datoMedico.second->getCantidadJornadas()<<std::endl;
+            for (const Jornada& jornadaMedico : datoMedico.second->getHistorialJornada()) {
+                std::cout<<"Numero de la jornada que realizo: "<<jornadaMedico.getNumJornada()<<std::endl;
+                std::cout<<"Turnos realizados en la jornada: "<<jornadaMedico.getTurnos()<<std::endl;
+            }
+        }
+    }
+    bool hayPerdidos = false;
+    for (const auto& datoPaciente : historialPaciente) {
+
+        if (datoPaciente.second->getEstadoPaciente() == "PERDIDO") {
+            hayPerdidos = true;
+            std::cout<<"Cedula del paciente: "<<datoPaciente.second->getCedula()<<std::endl;
+            std::cout<<"Nombre del paciente: "<<datoPaciente.second->getNombre()<<std::endl;
+            std::cout<<"Condicion medica del paciente: "<<datoPaciente.second->getCondicionMedica()<<std::endl;
+            std::cout<<"Turno en el que llego el paciente: "<<datoPaciente.second->getTurnoLlegada()<<std::endl;
+            std::cout<<"Turnos que espero el paciente: "<<datoPaciente.second->getTurnosEspera()<<std::endl;
+            std::cout<<"Medico responsable del paciente: "<<datoPaciente.second->getMedicoResponsable()<<std::endl;
+        }
+
+    }
+    if (hayPerdidos == false) {
+        std::cout<<"No hay perdidos registrados durante la jornada"<<std::endl;
+    }
+}
+
+void Hospital::iniciarHospital() {
+    std::string nombreMedico;
+    int turnosEnJornada = 0;
+
+    std::cout << "Ingrese el nombre del medico que inicia el turno (sin espacios): ";
+    std::cin >> nombreMedico;
+
+    auto iteradorMedico = registroMedico.find(nombreMedico);
+    if (iteradorMedico != registroMedico.end()) {
+        medicoActual = iteradorMedico->second;
+    }
+    else {
+        Medico* nuevoMedico = new Medico(nombreMedico);
+        registroMedico.insert({nombreMedico, nuevoMedico});
+        medicoActual = nuevoMedico;
+    }
+
+    while (contadorTurnos < 50) {
+        controlTiempo();
+        turnosEnJornada++;
+        mostrarHospital();
+
+        char opcion = accionesMedico();
+
+        if (opcion == 'o' || opcion == 'O') {
+            break;
+        }
+
+        if (opcion == 'e' || opcion == 'E') {
+            if (medicoActual != nullptr) {
+                medicoActual->registrarJornada(turnosEnJornada);
+            }
+            turnosEnJornada = 0;
+
+            std::cout << "Ingrese el nombre del medico de reemplazo (sin espacios): ";
+            std::cin >> nombreMedico;
+
+            auto iteradorRelevo = registroMedico.find(nombreMedico);
+            if (iteradorRelevo != registroMedico.end()) {
+                medicoActual = iteradorRelevo->second;
+            }
+            else {
+                Medico* nuevoMedico = new Medico(nombreMedico);
+                registroMedico.insert({nombreMedico, nuevoMedico});
+                medicoActual = nuevoMedico;
+            }
+        }
+    }
+
+    if (medicoActual != nullptr && turnosEnJornada > 0) {
+        medicoActual->registrarJornada(turnosEnJornada);
+    }
+
+    mostrarReporteFinal();
+    mostrarAuditoria();
+}

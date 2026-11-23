@@ -45,6 +45,8 @@ class Hospital {
     char accionesMedico();
     void controlTiempo();
     void mostrarHospital();
+    void mostrarReporteFinal();
+    void mostrarAuditoria();
 
     public:
     Hospital();
