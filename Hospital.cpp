@@ -133,28 +133,28 @@ void Hospital::mostrarHospital() {
         if (pacienteActual->getNivelGravedad() == 1) {
             gravedad1++;
             esperaGravedad1 += pacienteActual->getTurnosEspera();
-            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<"Tiene "<< pacienteActual->getTurnosEspera()<<"/6"<< "[ALERTA]" <<std::endl;
+            std::cout<<"El paciente: "<< pacienteActual->getNombre()<< " Con cedula: "<<pacienteActual->getCedula()<<" Tiene: "<< pacienteActual->getTurnosEspera()<<"/6"<< "[ALERTA]" <<std::endl;
         }
         else if (pacienteActual->getNivelGravedad() == 2) {
             gravedad2++;
             esperaGravedad2 += pacienteActual->getTurnosEspera();
-            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<"Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
+            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<" Con cedula"<< pacienteActual->getCedula()<<" Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
 
         }
         else if (pacienteActual->getNivelGravedad() == 3) {
             gravedad3++;
             esperaGravedad3 += pacienteActual->getTurnosEspera() ;
-            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<"Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
+            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<" Con cedula"<< pacienteActual->getCedula()<<" Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
         }
         else if (pacienteActual->getNivelGravedad() == 4) {
             gravedad4++;
             esperaGravedad4 += pacienteActual->getTurnosEspera();
-            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<"Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
+            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<" Con cedula"<< pacienteActual->getCedula()<<" Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
         }
         else if (pacienteActual->getNivelGravedad() == 5) {
             gravedad5++;
             esperaGravedad5 += pacienteActual->getTurnosEspera();
-            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<"Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
+            std::cout<<"El paciente: "<< pacienteActual->getNombre()<<" Con cedula"<< pacienteActual->getCedula()<<" Tiene "<< pacienteActual->getTurnosEspera()<<std::endl;
         }
 
     }
@@ -272,7 +272,7 @@ char Hospital::accionesMedico() {
                 std::cout<<"ya te encuentras en la cama #10"<<std::endl;
             }
             break;
-        case'r': case 'R':
+        case'r': case 'R': {
             if (!camaActual->getCamaOcupada() && !colaPrioridad.empty()) {
                 Paciente* sgtePaciente = colaPrioridad.top();
                 colaPrioridad.pop();
@@ -284,9 +284,74 @@ char Hospital::accionesMedico() {
                 std::cout <<"La cama ya se encuentra ocupada o la cola de pacientes esta vacia"<<std::endl;
             }
             break;
+        }
         case 't': case 'T':
-            
+            if (camaActual->getCamaOcupada() == true && camaActual->getTurnosRecuperacion() > 0) {
+                camaActual ->avanzarTurno();
+            }
+            else {
+                std::cout<<"La cama esta vacia o el paciente ya completo sus turnos y esta listo para ser dado de alta"<<std::endl;
+            }
+            break;
+        case'x':case'X': {
+            if (camaActual->getCamaOcupada() == true && camaActual->getTurnosRecuperacion() == 0) {
+                Paciente* pacienteDeAlta = camaActual->getPaciente();
+                pacienteDeAlta->setEstadoPaciente("ALTA");
+                pacienteDeAlta->setTurnoFinal(contadorTurnos);
+                if (medicoActual != nullptr) {
+                    pacienteDeAlta->setMedicoResponsable(medicoActual->getNombreMedico());
+                }
+                ultimoAtendido.push(pacienteDeAlta);
+                pacientesDeAlta++;
+                camaActual->liberarCama();
+
+            }
+            else {
+                std::cout<<"Al paciente aun le quedan turnos."<<std::endl;
+
+            }
+            break;
+        }
+            case 'u': case 'U': {
+            std::stack<Paciente*> pilaTemporal = ultimoAtendido;
+            if (pilaTemporal.empty()) {
+                std::cout<<"Aun no hay pacientes dados de alta"<<std::endl;
+            }
+            else {
+                while (!pilaTemporal.empty()) {
+                    std::cout<< "Cedula del paciente: "<<pilaTemporal.top()->getCedula() <<std::endl;
+                    std::cout<<"Nivel de gravedad: "<<pilaTemporal.top()->getNivelGravedad()<<std::endl;
+                    pilaTemporal.pop();
+                }
+            }
+            break;
+        }
+            case 'c': case 'C': {
+            std::string cedulaBuscada;
+            std::cin>>cedulaBuscada;
+
+            auto pacienteIterador = historialPaciente.find(cedulaBuscada);
+            if (pacienteIterador != historialPaciente.end()) {
+                std::cout<<"La cedula del paciente es: "<<pacienteIterador->second->getCedula()<<std::endl;
+                std::cout<<"El estado del paciente es: "<<pacienteIterador->second->getEstadoPaciente()<<std::endl;
+                std::cout<<"Los turnos de espera del paciente son: "<<pacienteIterador->second->getTurnosEspera()<<std::endl;
+                std::cout<<"El medico responsable del paciente es: "<<pacienteIterador->second->getMedicoResponsable()<<std::endl;
+            }
+            else {
+                std::cout<<"Esta cedula no esta registrada"<<std::endl;
+            }
+            break;
+        }
+            case 'e': case 'E':
+            std::cout<<"El medico ha cerrado el turno."<<std::endl;
+            break;
+            case 'o': case 'O':
+            std::cout<<"________CERRANDO HOSPITAL DMV_________"<<std::endl;
+            break;
+            default:
+            std::cout<<"Opcion no valida"<<std::endl;
+            break;
+        }
+    return opcion;
     }
 
-
-}
